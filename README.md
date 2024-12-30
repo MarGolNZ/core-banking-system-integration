@@ -1,1 +1,1 @@
-# core-naking-system-integration
+# core-banking-system-integration
