@@ -14,12 +14,13 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       ? JSON.parse(event.body)
       : {
           accountId: "testAccountId",
+          customerName: `Test Customer`,
           depositInfo: { amount: 1000 },
           loanAmount: 5000,
         };
-    const { accountId, depositInfo, loanAmount } = loanForm;
+    const { accountId, customerName, depositInfo, loanAmount } = loanForm;
 
-    if (!accountId || !depositInfo || !loanAmount) {
+    if (!accountId || !customerName || !depositInfo || !loanAmount) {
       return {
         statusCode: 400,
         body: JSON.stringify({ error: "Invalid loan form data." }),
@@ -27,7 +28,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     }
 
     // Send loan form to both KYC and LTI queues
-    await sendMessageToQueue(kycQueueUrl, { accountId, depositInfo });
+    await sendMessageToQueue(kycQueueUrl, { accountId, customerName, depositInfo });
     await sendMessageToQueue(ltiQueueUrl, { accountId, loanAmount });
 
     return {

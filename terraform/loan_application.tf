@@ -35,7 +35,7 @@ resource "null_resource" "compile_loan_application_lambda" {
       cd ../lambdas/loan_application && \
       npm ci && \
       npm run build && \
-      if [ -d .temp ]; then rm -rf .temp; fi && mkdir .temp && \
+      rm -rf .temp && mkdir .temp && \
       cp -r node_modules  .temp && \
       cp -r dist/* .temp && \
       cd ../../terraform

@@ -5,6 +5,11 @@ const ltiResultQueueUrl = process.env.LTI_RESULT_QUEUE_URL!;
 const sqs = new SQS();
 
 export const handler = async (event: SQSEvent) => {
+
+  if (!event.Records || !Array.isArray(event.Records)) {
+    throw new Error("Invalid event: Missing or invalid Records array");
+  }
+  
   for (const record of event.Records) {
     const { accountId, loanAmount } = JSON.parse(record.body);
 
