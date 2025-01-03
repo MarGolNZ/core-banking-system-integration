@@ -5,23 +5,26 @@ const ltiResultQueueUrl = process.env.LTI_RESULT_QUEUE_URL!;
 const sqs = new SQS();
 
 export const handler = async (event: SQSEvent) => {
+  try {
+    if (!event.Records || !Array.isArray(event.Records)) {
+      throw new Error("Invalid event: Missing or invalid Records array");
+    }
+    
+    for (const record of event.Records) {
+      const { accountId, loanAmount } = JSON.parse(record.body);
 
-  if (!event.Records || !Array.isArray(event.Records)) {
-    throw new Error("Invalid event: Missing or invalid Records array");
-  }
-  
-  for (const record of event.Records) {
-    const { accountId, loanAmount } = JSON.parse(record.body);
+      // Perform LTI check logic
+      const ltiValid = await performLtiCheck(accountId, loanAmount);
 
-    // Perform LTI check logic
-    const ltiValid = await performLtiCheck(accountId, loanAmount);
-
-    // Send LTI result to result queue
-    await sendMessageToQueue(ltiResultQueueUrl, {
-      accountId,
-      loanAmount,
-      status: ltiValid ? "LTI Success" : "LTI Failure",
-    });
+      // Send LTI result to result queue
+      await sendMessageToQueue(ltiResultQueueUrl, {
+        accountId,
+        loanAmount,
+        status: ltiValid ? "LTI Success" : "LTI Failure",
+      });
+    }
+  } catch (error) {
+    console.error("Error processing LTI check:", error);
   }
 };
 
