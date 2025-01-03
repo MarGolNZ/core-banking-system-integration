@@ -11,7 +11,7 @@ graph TD
   B -->|Result to KYC Result Queue| D[Loan Decision Maker (Lambda)]
   C -->|Result to LTI Result Queue| D
   D -->|Final Decision to Notification Queue| E[Notification Handler (Lambda)]
-  E -->|Email| F[SES]
+  E -->|Sends Email| F[SES]
 ```
 
 ### Prerequisites
