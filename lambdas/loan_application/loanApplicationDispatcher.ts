@@ -1,4 +1,4 @@
-import { APIGatewayProxyHandler } from "aws-lambda";
+import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { SQS } from "aws-sdk";
 import dotenv from "dotenv";
 
@@ -8,7 +8,7 @@ const kycQueueUrl = process.env.KYC_REQUEST_QUEUE_URL!;
 const ltiQueueUrl = process.env.LTI_REQUEST_QUEUE_URL!;
 const sqs = new SQS();
 
-export const handler: APIGatewayProxyHandler = async (event) => {
+export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
   try {
     const loanForm = event.body
       ? JSON.parse(event.body)
@@ -51,5 +51,5 @@ async function sendMessageToQueue(queueUrl: string, messageBody: object) {
     QueueUrl: queueUrl,
     MessageBody: JSON.stringify(messageBody),
   };
-  await sqs.sendMessage(params).promise();
+  await sqs.sendMessage(params).promise()  
 }
