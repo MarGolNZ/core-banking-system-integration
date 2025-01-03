@@ -5,13 +5,13 @@
 ### Architecture Overview
 
 ```mermaid
-graph TD
-  A[Loan Application Dispatcher (Lambda)] -->|Sends to KYC Queue| B[KYC Check (Lambda)]
-  A -->|Sends to LTI Queue| C[LTI Check (Lambda)]
-  B -->|Result to KYC Result Queue| D[Loan Decision Maker (Lambda)]
-  C -->|Result to LTI Result Queue| D
-  D -->|Final Decision to Notification Queue| E[Notification Handler (Lambda)]
-  E -->|Sends Email| F[SES]
+graph TD;
+  A[Loan Application Dispatcher (Lambda)] -->|Sends to KYC Queue| B[KYC Check (Lambda)];
+  A -->|Sends to LTI Queue| C[LTI Check (Lambda)];
+  B -->|Result to KYC Result Queue| D[Loan Decision Maker (Lambda)];
+  C -->|Result to LTI Result Queue| D;
+  D -->|Final Decision to Notification Queue| E[Notification Handler (Lambda)];
+  E -->|Sends Email| F[SES];
 ```
 
 ### Prerequisites
