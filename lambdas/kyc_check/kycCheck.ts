@@ -6,6 +6,9 @@ const sqs = new SQS();
 
 export const handler = async (event: SQSEvent) => {
   try {
+    if (!event.Records || !Array.isArray(event.Records)) {
+      throw new Error("Invalid event: Missing or invalid Records array");
+    }
     for (const record of event.Records) {
       const { accountId, customerName, depositInfo, loanAmount } = JSON.parse(record.body);
 
@@ -29,11 +32,11 @@ export const handler = async (event: SQSEvent) => {
 async function performKycCheck(accountId: string, customerName: string, depositInfo: any, loanAmount: number): Promise<boolean> {
   // Check for blacklisted name
   if (customerName === "Pablo Escobar") {
-    return false; // Fail the KYC check
+    return false;
   }
 
   // Perform actual KYC validation here
-  return Math.random() > 0.5; // Mock result
+  return true; // Mock result
 }
 
 // Helper function to send messages to the queue

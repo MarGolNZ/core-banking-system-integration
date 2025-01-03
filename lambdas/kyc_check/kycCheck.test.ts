@@ -2,7 +2,6 @@ import { handler } from "./kycCheck";
 import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals';
 import { SQSEvent } from "aws-lambda";
 import AWS from 'aws-sdk';
-
 import dotenv from 'dotenv';
 
 dotenv.config({ path: '.env.test' });
